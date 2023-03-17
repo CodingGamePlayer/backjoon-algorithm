@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
+import java.util.stream.IntStream;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -16,46 +17,31 @@ public class Main {
     }
 
     public static void print(int N, int K) {
-        LinkedList<Integer> list = new LinkedList<>();
-        int[] answer = new int[N];
         StringBuffer sb = new StringBuffer();
-        boolean out = false;
 
-        int count = 0;
+        LinkedList peopleList = new LinkedList();
+        LinkedList result = new LinkedList();
 
-        for (int i = 1; i <= N; i++) {
-            answer[i - 1] = i;
-        }
+        IntStream.range(1, N + 1).forEach(x -> peopleList.add(x));
 
+        int cnt = 0;
+        while(!peopleList.isEmpty()){
+            int data = (int)peopleList.remove();
+            cnt++;
 
-        while (list.size() != N) {
-            for (int i = 0; i < answer.length; i++) {
-                if (!out) {
-                    if (answer[i] == -1) {
-                        continue;
-                    }
-                    count++;
-                    out = count % K == 0;
-                }
-
-                if (out) {
-                    if (answer[i] == -1) {
-                        continue;
-                    }
-                    list.add(answer[i]);
-                    answer[i] = -1;
-                    out = false;
-                }
-
+            if(cnt % K == 0){
+                result.add(data);
+            }else {
+                peopleList.add(data);
             }
         }
 
         sb.append("<");
-        for (int i = 0; i < list.size(); i++) {
-            if (i == answer.length - 1) {
-                sb.append(list.get(i) + ">");
+        for (int i = 0; i < result.size(); i++) {
+            if (i == result.size() - 1) {
+                sb.append(result.get(i) + ">");
             } else {
-                sb.append(list.get(i) + ", ");
+                sb.append(result.get(i) + ", ");
             }
         }
 
