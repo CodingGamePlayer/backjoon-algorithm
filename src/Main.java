@@ -1,50 +1,99 @@
 package src;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.stream.IntStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.function.ToIntFunction;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] line = br.readLine().split(" ");
-        int N = Integer.parseInt(line[0]);
-        int K = Integer.parseInt(line[1]);
-
-        print(N, K);
+        Scanner sc = new Scanner(System.in);
+        String[] arr1 = sc.nextLine().split(" ");
+        String[] arr2 = sc.nextLine().split(" ");
+        int N = Integer.parseInt(arr1[0]);
+        int K = Integer.parseInt(arr1[1]);
+        int[] ints = Arrays.stream(arr2).mapToInt(Integer::parseInt).toArray();
+        solution(N, K, ints);
     }
 
-    public static void print(int N, int K) {
-        StringBuffer sb = new StringBuffer();
 
-        LinkedList peopleList = new LinkedList();
-        LinkedList result = new LinkedList();
+    private static void solution(int N, int K, int[] arr2) {
+        int[] minHeap = new int[N + 1];
+        int count = 0;
+        int limit = K;
 
-        IntStream.range(1, N + 1).forEach(x -> peopleList.add(x));
+        for (int i = 1; i < minHeap.length; i++) {
 
-        int cnt = 0;
-        while(!peopleList.isEmpty()){
-            int data = (int)peopleList.remove();
-            cnt++;
+            int cur = i;
+            minHeap[i] = arr2[i - 1];
+            if (limit > 0){
 
-            if(cnt % K == 0){
-                result.add(data);
-            }else {
-                peopleList.add(data);
+                while (cur > 1 && minHeap[cur / 2] > minHeap[cur]) {
+                    int parentValue = minHeap[cur / 2];
+                    minHeap[cur / 2] = minHeap[cur];
+                    minHeap[cur] = parentValue;
+
+                    cur /= 2;
+                    count++;
+                    limit--;
+
+                }
             }
         }
-
-        sb.append("<");
-        for (int i = 0; i < result.size(); i++) {
-            if (i == result.size() - 1) {
-                sb.append(result.get(i) + ">");
-            } else {
-                sb.append(result.get(i) + ", ");
+        if (limit < 0) {
+            System.out.println(-1);
+        } else {
+            for (int i = 1; i < minHeap.length; i++) {
+                if (i < minHeap.length - 1) {
+                    System.out.print(minHeap[i] + " ");
+                } else {
+                    System.out.print(minHeap[i]);
+                }
             }
+            System.out.println();
         }
-
-        System.out.println(sb.toString());
     }
+
+
 }
+//            if (K > 0) {
+//                    int cur = i;
+//                    minHeap[i] = arr2[i - 1];
+//
+//                    while (cur > 1 && minHeap[cur / 2] > minHeap[cur]) {
+//                    int parentValue = minHeap[cur / 2];
+//                    minHeap[cur / 2] = minHeap[cur];
+//                    minHeap[cur] = parentValue;
+//
+//                    cur /= 2;
+//                    count++;
+//                    }
+//
+//                    while (true) {
+//                    int leftIdx = cur * 2;
+//                    int rightIdx = cur * 2 + 1;
+//                    int targetIdx = -1;
+//
+//                    if (rightIdx < minHeap.length) {
+//        targetIdx = minHeap[leftIdx] < minHeap[rightIdx] ? leftIdx : rightIdx;
+//        } else if (leftIdx < minHeap.length) {
+//        targetIdx = leftIdx;
+//        } else {
+//        break;
+//        }
+//
+//        if (minHeap[cur] < minHeap[targetIdx]) {
+//        break;
+//        } else {
+//        int parentValue = minHeap[cur];
+//        minHeap[targetIdx] = parentValue;
+//        minHeap[cur] = minHeap[targetIdx];
+//        cur = targetIdx;
+//        count++;
+//        }
+//        }
+//
+//        } else {
+//        minHeap[i] = arr2[i - 1];
+//        }
