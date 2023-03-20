@@ -3,6 +3,7 @@ package src;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class Main {
 
@@ -10,60 +11,53 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         ArrayList<String> list = new ArrayList<>();
 
-        while (true) {
-            String paragraph = sc.nextLine();
-            if ("0".equals(paragraph)) break;
-            list.add(paragraph);
+        int count = Integer.parseInt(sc.nextLine());
+
+        while (count > 0) {
+            String now = sc.next();
+            sc.nextLine();
+            list.add(now);
+            count--;
         }
 
-        String WHO = sc.nextLine();
-        String WHERE = sc.nextLine();
-        String WHAT = sc.nextLine();
+        solution(list);
 
-        solution(list, WHO, WHERE, WHAT);
     }
 
-    public static void solution(ArrayList<String> list, String WHO, String WHERE, String WHAT) {
+    private static void solution(ArrayList<String> list) {
+        Stack stack = new Stack();
         int count = 0;
 
-        while (list.size() != count) {
-            String now = list.get(count);
+        while (list.size() > count) {
+            stack.clear();
 
-            if (now.contains("WHO")) {
-                now = now.replaceAll("WHO", WHO);
-            }
-            if (now.contains("WHERE")) {
-                switch (WHERE) {
-                    case "WHO":
-                        now = now.replaceAll("WHERE", WHO);
+            boolean flag = false;
+            String s = list.get(count);
+            String[] split = s.split("");
+
+            for (String str : split) {
+
+                if ("(".equals(str)) {
+                    stack.add("(");
+                } else {
+                    if (stack.isEmpty()) {
+                        flag = true;
                         break;
-                    default:
-                        now = now.replaceAll("WHERE", WHERE);
+                    }
+                    stack.pop();
                 }
-            }
-            if (now.contains("WHAT")) {
-                switch (WHAT) {
-                    case "WHERE":
-                        switch (WHERE) {
-                            case "WHO" :
-                                now = now.replaceAll("WHAT", WHO);
-                                break;
-                            default:
-                                now = now.replaceAll("WHAT", WHERE);
-                        }
-                        break;
-                    case "WHO":
-                        now = now.replaceAll("WHAT", WHO);
-                        break;
-                    default:
-                        now = now.replaceAll("WHAT", WHAT);
-                }
+
             }
 
+            if (!flag && stack.isEmpty()){
+                System.out.println("YES");
+            } else {
+                System.out.println("NO");
 
-            System.out.println(now);
+            }
             count++;
         }
+
 
     }
 
