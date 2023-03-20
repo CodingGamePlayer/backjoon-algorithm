@@ -1,64 +1,36 @@
 package src;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
-        ArrayList<String> list = new ArrayList<>();
 
-        int count = Integer.parseInt(sc.nextLine());
+        int count = sc.nextInt();
+        sc.nextLine();
+        int[] s = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int target = sc.nextInt();
+        sc.nextLine();
 
-        while (count > 0) {
-            String now = sc.next();
-            sc.nextLine();
-            list.add(now);
-            count--;
-        }
-
-        solution(list);
+        solution(s, target);
 
     }
 
-    private static void solution(ArrayList<String> list) {
-        Stack stack = new Stack();
-        int count = 0;
+    private static void solution(int[] s, int target) {
 
-        while (list.size() > count) {
-            stack.clear();
+        Hashtable<Integer, Integer> map = new Hashtable<>();
 
-            boolean flag = false;
-            String s = list.get(count);
-            String[] split = s.split("");
-
-            for (String str : split) {
-
-                if ("(".equals(str)) {
-                    stack.add("(");
-                } else {
-                    if (stack.isEmpty()) {
-                        flag = true;
-                        break;
-                    }
-                    stack.pop();
-                }
-
-            }
-
-            if (!flag && stack.isEmpty()){
-                System.out.println("YES");
-            } else {
-                System.out.println("NO");
-
-            }
-            count++;
+        for (int i : s) {
+            int num = (int) map.getOrDefault(i, 0);
+            map.put(i, ++num);
         }
 
-
+        if (map.get(target) != null)
+            System.out.println(map.get(target));
+        else
+            System.out.println(0);
     }
 
 
