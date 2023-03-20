@@ -1,75 +1,70 @@
 package src;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-    static int count = 0;
-    static int LIMIT;
 
     public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
-        String[] arr1 = sc.nextLine().split(" ");
-        String[] arr2 = sc.nextLine().split(" ");
-        int N = Integer.parseInt(arr1[0]);
-        LIMIT = Integer.parseInt(arr1[1]);
-        int[] ints = Arrays.stream(arr2).mapToInt(Integer::parseInt).toArray();
+        ArrayList<String> list = new ArrayList<>();
 
-        heapSort(ints);
-        System.out.println(-1);
+        while (true) {
+            String paragraph = sc.nextLine();
+            if ("0".equals(paragraph)) break;
+            list.add(paragraph);
+        }
+
+        String WHO = sc.nextLine();
+        String WHERE = sc.nextLine();
+        String WHAT = sc.nextLine();
+
+        solution(list, WHO, WHERE, WHAT);
     }
 
-    private static void heapSort(int[] ints) {
-        int len = ints.length;
-        buildHeap(ints, len); // 최소힙을 생성하는 메소드
+    public static void solution(ArrayList<String> list, String WHO, String WHERE, String WHAT) {
+        int count = 0;
 
-        for (int i = len - 1; i >= 0; i--) {
-            swap(ints, 0, i);
-            heapify(ints, 0, i);
-        }
-    }
+        while (list.size() != count) {
+            String now = list.get(count);
 
-    private static void buildHeap(int[] ints, int len) {
-        for (int i = len / 2 - 1; i >= 0; i--) {
-            heapify(ints, i, len);
-        }
-    }
+            if (now.contains("WHO")) {
+                now = now.replaceAll("WHO", WHO);
+            }
+            if (now.contains("WHERE")) {
+                switch (WHERE) {
+                    case "WHO":
+                        now = now.replaceAll("WHERE", WHO);
+                        break;
+                    default:
+                        now = now.replaceAll("WHERE", WHERE);
+                }
+            }
+            if (now.contains("WHAT")) {
+                switch (WHAT) {
+                    case "WHERE":
+                        switch (WHERE) {
+                            case "WHO" :
+                                now = now.replaceAll("WHAT", WHO);
+                                break;
+                            default:
+                                now = now.replaceAll("WHAT", WHERE);
+                        }
+                        break;
+                    case "WHO":
+                        now = now.replaceAll("WHAT", WHO);
+                        break;
+                    default:
+                        now = now.replaceAll("WHAT", WHAT);
+                }
+            }
 
-    private static void heapify(int[] ints, int i, int len) {
-        int leftIdx = i * 2 + 1;
-        int rightIdx = i * 2 + 2;
-        int targetIdx = -1;
-
-        if (rightIdx < len) {
-            targetIdx = ints[leftIdx] < ints[rightIdx] ? leftIdx : rightIdx;
-        } else if (leftIdx < len) {
-            targetIdx = leftIdx;
-        } else {
-            return;
-        }
-
-        if (ints[targetIdx] < ints[i]) {
-            swap(ints, i, targetIdx);
-            heapify(ints, targetIdx, len);
-        }
-    }
-
-    private static void swap(int[] ints, int i, int targetIdx) {
-        if (count++ < LIMIT) {
-            int parentVal = ints[i];
-            ints[i] = ints[targetIdx];
-            ints[targetIdx] = parentVal;
-
-
-        }
-        if (count == LIMIT + 1) {
-            StringBuffer sb = new StringBuffer();
-            Arrays.stream(ints).forEach(s -> sb.append(s).append(" "));
-            System.out.println(sb);
-            System.exit(0);
+            System.out.println(now);
+            count++;
         }
 
     }
+
 
 }
