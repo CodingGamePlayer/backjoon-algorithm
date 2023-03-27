@@ -5,29 +5,51 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int[] v = new int[n];
-        for (int i = 0; i < n; i++) {
-            v[i] = sc.nextInt();
+        Deque<String> deque = new LinkedList<>();
+
+        while (!"=".equals(deque.peekLast())) {
+            deque.offerLast(sc.nextLine());
         }
 
-        int[] bcnt = new int[20]; // 각 자리수별로 1이 몇 개 있는지
+        solution(deque);
+    }
 
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < n; j++) {
-                if ((v[j] & (1 << i)) != 0) {
-                    bcnt[i]++;
+    private static void solution(Deque<String> deque) {
+        int result = 0;
+        String operation = "";
+        boolean isOperation = false;
+        result = Integer.parseInt(deque.pollFirst());
+        while (!deque.isEmpty()) {
+            String s = deque.pollFirst();
+
+            if ("+".equals(s) || "-".equals(s) || "/".equals(s) || "*".equals(s)) {
+                isOperation = true;
+                operation = s;
+            } else if ("=".equals(s)) {
+                break;
+            } else {
+                switch (operation) {
+                    case "+":
+                        result += Integer.parseInt(s);
+                        break;
+                    case "-":
+                        result -= Integer.parseInt(s);
+                        break;
+                    case "/":
+                        result /= Integer.parseInt(s);
+                        break;
+                    case "*":
+                        result *= Integer.parseInt(s);
+                        break;
+                    default:
+                        isOperation = false;
                 }
             }
+
+
         }
 
-        long ans = 0;
-
-        for (int i = 0; i < 20; i++) {
-            ans += (1L << i) * bcnt[i] * (n - bcnt[i]);
-        }
-
-        System.out.println(ans);
+        System.out.println(result);
     }
 }
 
