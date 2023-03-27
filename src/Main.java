@@ -1,55 +1,62 @@
 package src;
 
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        Deque<String> deque = new LinkedList<>();
+    static int n;
+    static ArrayList<Integer>[] tree;
+    static int[] parent;
 
-        while (!"=".equals(deque.peekLast())) {
-            deque.offerLast(sc.nextLine());
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        n = Integer.parseInt(br.readLine());
+
+        tree = new ArrayList[n + 1];
+        for (int i = 1; i <= n; i++) {
+            tree[i] = new ArrayList<>();
         }
 
-        solution(deque);
+        parent = new int[n + 1];
+
+        for (int i = 0; i < n - 1; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int u = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
+
+            tree[u].add(v);
+            tree[v].add(u);
+        }
+
+        bfs();
+
+        for (int i = 2; i <= n; i++) {
+            System.out.println(parent[i]);
+        }
     }
 
-    private static void solution(Deque<String> deque) {
-        int result = 0;
-        String operation = "";
-        boolean isOperation = false;
-        result = Integer.parseInt(deque.pollFirst());
-        while (!deque.isEmpty()) {
-            String s = deque.pollFirst();
+    static void bfs() {
+        boolean[] visited = new boolean[n + 1];
+        Queue<Integer> q = new LinkedList<>();
 
-            if ("+".equals(s) || "-".equals(s) || "/".equals(s) || "*".equals(s)) {
-                isOperation = true;
-                operation = s;
-            } else if ("=".equals(s)) {
-                break;
-            } else {
-                switch (operation) {
-                    case "+":
-                        result += Integer.parseInt(s);
-                        break;
-                    case "-":
-                        result -= Integer.parseInt(s);
-                        break;
-                    case "/":
-                        result /= Integer.parseInt(s);
-                        break;
-                    case "*":
-                        result *= Integer.parseInt(s);
-                        break;
-                    default:
-                        isOperation = false;
+        visited[1] = true;
+        q.offer(1);
+
+        while (!q.isEmpty()) {
+            int node = q.poll();
+
+            for (int child : tree[node]) {
+                if (!visited[child]) {
+                    visited[child] = true;
+                    parent[child] = node;
+                    q.offer(child);
                 }
             }
-
-
         }
-
-        System.out.println(result);
     }
 }
-
