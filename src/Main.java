@@ -6,39 +6,44 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
+    static int answer = 0;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        int[][] arr = new int[N][M];
+        int[] arr = new int[Integer.parseInt(st.nextToken())];
+        int target = Integer.parseInt(st.nextToken());
+        st = new StringTokenizer(br.readLine());
 
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < M; j++) {
-                arr[i][j] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
+        }
+        int solution = solution(arr, target);
+        System.out.println(solution);
+    }
+
+    private static int solution(int[] arr, int target) {
+        int answer = 0;
+        int left = 0;
+        int right = 0;
+        int sum = 0;
+
+        while (true) {
+            if (sum >= target) {
+                sum -= arr[left++];
+            } else if (right == arr.length) {
+                break;
+            } else {
+                sum += arr[right++];
+            }
+
+            if (sum == target) {
+                answer++;
             }
         }
 
-        int k = Integer.parseInt(br.readLine());
-
-        while (k > 0) {
-            k--;
-            st = new StringTokenizer(br.readLine());
-            int i = Integer.parseInt(st.nextToken());
-            int j = Integer.parseInt(st.nextToken());
-            int x = Integer.parseInt(st.nextToken());
-            int y = Integer.parseInt(st.nextToken());
-
-            int sum = 0;
-            for (int l = i - 1; l < x; l++) {
-                for (int m = j -1; m < y; m++) {
-                    sum += arr[l][m];
-                }
-            }
-            System.out.println(sum);
-        }
+        return answer;
     }
 
 }
