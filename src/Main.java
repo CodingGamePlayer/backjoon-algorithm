@@ -12,38 +12,35 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int[] arr = new int[Integer.parseInt(st.nextToken())];
-        int target = Integer.parseInt(st.nextToken());
-        st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int[][] arr = new int[n][n];
 
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
-        }
-        int solution = solution(arr, target);
-        System.out.println(solution);
-    }
-
-    private static int solution(int[] arr, int target) {
-        int answer = 0;
-        int left = 0;
-        int right = 0;
-        int sum = 0;
-
-        while (true) {
-            if (sum >= target) {
-                sum -= arr[left++];
-            } else if (right == arr.length) {
-                break;
-            } else {
-                sum += arr[right++];
-            }
-
-            if (sum == target) {
-                answer++;
+        for (int i = 0; i < n; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < n; j++) {
+                arr[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
-        return answer;
+        dp(arr, n, 0, 0);
+        System.out.println(answer);
+
     }
+
+    private static void dp(int[][] arr, int n, int row, int col) {
+        if (row >= n || col >= n) {
+            return;
+        }
+
+        if (arr[row][col] == 0) {
+            answer++;
+            return;
+        }
+
+        dp(arr, n, row + arr[row][col], col);
+        dp(arr, n , row, col + arr[row][col]);
+
+    }
+
 
 }
