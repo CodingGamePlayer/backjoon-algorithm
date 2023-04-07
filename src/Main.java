@@ -11,27 +11,28 @@ public class Main {
         int t = sc.nextInt();
 
         while (t-- > 0) {
-            int num = sc.nextInt();
-            System.out.println(solution(num));
+            int dong = sc.nextInt();
+            int ho = sc.nextInt();
+            System.out.println(solution(dong, ho));
         }
 
     }
 
-    private static int solution(int n) {
-        int[] dp = new int[n + 1];
-        dp[1] = 1;
+    private static int solution(int dong, int ho) {
+        int[][] dp = new int[dong + 1][ho + 1];
 
-        if (n >= 2) {
-            dp[2] = 2;
+        for (int i = 0; i < dp[0].length; i++) {
+            dp[0][i] = i;
         }
-        if (n >= 3) {
-            dp[3] = 4;
+        for (int i = 0; i < dp.length - 1; i++) {
+            for (int j = 1; j < dp[i].length; j++) {
+                for (int k = 1; k <= j; k++) {
+                    dp[i + 1][j] += dp[i][k];
+                }
+            }
         }
 
-        for (int i = 4; i <= n; i++) {
-            dp[i] = dp[i - 1] + dp[i - 2] + dp[i - 3];
-        }
-        return dp[n];
+        return dp[dong][ho];
     }
 }
 
