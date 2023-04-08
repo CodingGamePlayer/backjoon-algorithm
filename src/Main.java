@@ -1,15 +1,13 @@
 package src;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
     static int[][] matrix;
-    static int blue = 0;
-    static int white = 0;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -25,38 +23,34 @@ public class Main {
             }
         }
 
-        cut(0, 0, N);
-        System.out.println(white);
-        System.out.println(blue);
+        System.out.println(recur(0, 0, N));
+
     }
 
-    public static void cut(int x, int y, int size) {
-        int color = matrix[x][y]; // 시작점의 색상
-        boolean sameColor = true;
-        for (int i = x; i < x + size; i++) {
-            for (int j = y; j < y + size; j++) {
-                if (matrix[i][j] != color) { // 색상이 다르면 분할
-                    sameColor = false;
-                    break;
+    public static int recur(int i, int j, int size) {
+        int[] arr = new int[4];
+
+        if (size == 2) {
+
+            int idx = 0;
+            for (int a = i; a < i + 2; a++) {
+                for (int b = j; b < j + 2; b++) {
+                    arr[idx++] = matrix[a][b];
                 }
             }
-            if (!sameColor) {
-                break;
-            }
+
+            Arrays.sort(arr);
+            return arr[2];
         }
-        if (sameColor) { // 같은 색상이면 종이 개수 증가
-            if (color == 0) {
-                white++;
-            } else {
-                blue++;
-            }
-        } else { // 다른 색상이면 분할
-            int newSize = size / 2;
-            cut(x, y, newSize);
-            cut(x, y + newSize, newSize);
-            cut(x + newSize, y, newSize);
-            cut(x + newSize, y + newSize, newSize);
-        }
+        size /= 2;
+        arr[0] = recur(i, j, size);
+        arr[1] = recur(i, j + size, size);
+        arr[2] = recur(i + size, j, size);
+        arr[3] = recur(i + size, j + size, size);
+
+        Arrays.sort(arr);
+        return arr[2];
     }
 }
+
 
