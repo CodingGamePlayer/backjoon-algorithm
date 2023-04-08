@@ -3,54 +3,54 @@ package src;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
 
 public class Main {
-    static int[][] matrix;
+    static int[][] arr;
+    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+        arr = new int[n][n];
 
-        int N = Integer.parseInt(br.readLine());
-
-        matrix = new int[N][N];
-
-        for (int i = 0; i < N; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < N; j++) {
-                matrix[i][j] = Integer.parseInt(st.nextToken());
+        // 입력 받기
+        for (int i = 0; i < n; i++) {
+            String str = br.readLine();
+            for (int j = 0; j < n; j++) {
+                arr[i][j] = str.charAt(j) - '0';
             }
         }
 
-        System.out.println(recur(0, 0, N));
+        divide(0, 0, n);
 
+        System.out.println(sb.toString());
     }
 
-    public static int recur(int i, int j, int size) {
-        int[] arr = new int[4];
+    public static void divide(int x, int y, int n) {
+        int color = arr[x][y];
+        boolean sameColor = true;
 
-        if (size == 2) {
-
-            int idx = 0;
-            for (int a = i; a < i + 2; a++) {
-                for (int b = j; b < j + 2; b++) {
-                    arr[idx++] = matrix[a][b];
+        for (int i = x; i < x + n; i++) {
+            for (int j = y; j < y + n; j++) {
+                if (color != arr[i][j]) {
+                    sameColor = false;
+                    break;
                 }
             }
-
-            Arrays.sort(arr);
-            return arr[2];
+            if (!sameColor) break;
         }
-        size /= 2;
-        arr[0] = recur(i, j, size);
-        arr[1] = recur(i, j + size, size);
-        arr[2] = recur(i + size, j, size);
-        arr[3] = recur(i + size, j + size, size);
 
-        Arrays.sort(arr);
-        return arr[2];
+        if (sameColor) {
+            sb.append(color);
+        } else {
+            sb.append("(");
+            int newSize = n / 2;
+            divide(x, y, newSize);
+            divide(x, y + newSize, newSize);
+            divide(x + newSize, y, newSize);
+            divide(x + newSize, y + newSize, newSize);
+            sb.append(")");
+        }
     }
 }
-
 
