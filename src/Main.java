@@ -27,6 +27,7 @@ public class Main {
                 System.out.print(arr[i] + " ");
             }
             System.out.println();
+            return;
         }
 
         for (int i = 0; i < n; i++) {
