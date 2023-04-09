@@ -1,45 +1,36 @@
 package src;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class Main {
+    static int n, m;
     static int[] arr;
-    static boolean[] visited;
+    static StringBuilder sb = new StringBuilder();
 
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        m = sc.nextInt();
+        arr = new int[m];
 
-        arr = new int[n];
-        visited = new boolean[n];
-
-        dfs(n, m, 0, 0);
+        dfs(0);
+        System.out.println(sb);
     }
 
-    private static void dfs(int n, int m, int depth, int i) {
+    public static void dfs(int depth) {
         if (depth == m) {
-            for (int j = 0; j < m; j++) {
-                System.out.print(arr[j] + " ");
+            for (int i = 0; i < m; i++) {
+                sb.append(arr[i]).append(" ");
             }
-            System.out.println();
+            sb.append("\n");
             return;
         }
 
-        for (int j = i; j < n; j++) {
-            if (!visited[j]) {
-                visited[j] = true;
-                arr[i] = j + 1;
-                dfs(n, m, depth + 1, j + 1);
-                visited[j] = false;
-            }
+        for (int i = 1; i <= n; i++) {
+            arr[depth] = i;
+            dfs(depth + 1);
         }
     }
-
 }
 
 
