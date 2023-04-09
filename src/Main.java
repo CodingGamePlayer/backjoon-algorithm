@@ -6,38 +6,40 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int n;
-    static int[] cols;
-    static int count = 0;
+    static int[] arr;
+    static boolean[] visited;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine());
-        cols = new int[n];
-        backtracking(0);
-        System.out.println(count);
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+
+        arr = new int[n];
+        visited = new boolean[n];
+
+        dfs(n, m, 0, 0);
     }
 
-    static void backtracking(int row) {
-        if (row == n) {
-            count++;
+    private static void dfs(int n, int m, int depth, int i) {
+        if (depth == m) {
+            for (int j = 0; j < m; j++) {
+                System.out.print(arr[j] + " ");
+            }
+            System.out.println();
             return;
         }
 
-        for (int i = 0; i < n; i++) {
-            cols[row] = i;
-            if (isPossible(row)){
-                backtracking(row + 1);
+        for (int j = i; j < n; j++) {
+            if (!visited[j]) {
+                visited[j] = true;
+                arr[i] = j + 1;
+                dfs(n, m, depth + 1, j + 1);
+                visited[j] = false;
             }
         }
     }
 
-    static boolean isPossible(int row) {
-        for (int i = 0; i < row; i++) {
-            if (cols[i] == cols[row] || Math.abs(cols[row] - cols[i]) == row - i) return false;
-        }
-        return true;
-    }
 }
 
 
