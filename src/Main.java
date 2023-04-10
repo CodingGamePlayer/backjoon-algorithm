@@ -6,22 +6,22 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
+        String s = sc.nextLine();
 
-        if (n % 10 != 0) {
-            System.out.println(-1);
-        } else {
-            int[] arr = {300, 60, 10};
+        String[] split1 = s.split("0{1,}");
+        String[] split2 = s.split("1{1,}");
 
-            int[] ans = new int[3];
-            for (int i = 0; i < arr.length; i++) {
-                if (n / arr[i] > 0) {
-                    ans[i] = n / arr[i];
-                    n %= arr[i];
-                }
-                System.out.print(ans[i] + " ");
-            }
+        int one = 0;
+        int zero = 0;
+        for (int i = 0; i < split1.length; i++) {
+            if (split1[i].contains("1")) one++;
         }
+
+        for (int i = 0; i < split2.length; i++) {
+            if (split2[i].contains("0")) zero++;
+        }
+
+        System.out.println(Math.min(one, zero));
     }
 }
 
