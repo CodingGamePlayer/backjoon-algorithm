@@ -1,33 +1,47 @@
 package src;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
-        int[] arr = new int[n];
+        int[] arr1 = new int[n];
+        int[] arr2 = new int[n];
 
         for (int i = 0; i < n; i++) {
-            arr[i] = sc.nextInt();
+            arr1[i] = sc.nextInt();
         }
 
-        Arrays.sort(arr);
-        solution(arr, n);
+        for (int i = 0; i < n; i++) {
+            arr2[i] = sc.nextInt();
+        }
+
+        solution(arr1, arr2, n);
 
     }
 
-    private static void solution(int[] arr, int n) {
-        int[] dp = new int[n];
-        dp[0] = arr[0];
+    private static void solution(int[] arr1, int[] arr2, int n) {
+        LinkedList<Integer> listA = new LinkedList<>(Arrays.stream(arr1).boxed().collect(Collectors.toList()));
+        LinkedList<Integer> listB = new LinkedList<>(Arrays.stream(arr2).boxed().collect(Collectors.toList()));
+        Collections.sort(listA);
+        Collections.sort(listB, Collections.reverseOrder());
 
-        for (int i = 1; i < n; i++) {
-            dp[i] = dp[i - 1] + arr[i];
+        int sum = 0;
+        while (n > 0){
+            int a = listA.poll();
+            int b = listB.poll();
+
+            sum += a * b;
+
         }
 
-        System.out.println(Arrays.stream(dp).reduce(0, (o1, o2) -> o1 + o2));
+        System.out.println(sum);
     }
 }
 
