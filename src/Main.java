@@ -8,20 +8,25 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         String s = sc.nextLine();
 
-        String[] split1 = s.split("0{1,}");
-        String[] split2 = s.split("1{1,}");
+        String[] splitA = s.split("[-]");
 
-        int one = 0;
-        int zero = 0;
-        for (int i = 0; i < split1.length; i++) {
-            if (split1[i].contains("1")) one++;
+        int ans = 0;
+        for (int i = 0; i < splitA.length; i++) {
+            String[] splitB = splitA[i].split("[+]");
+
+            int sum = 0;
+            for (int j = 0; j < splitB.length; j++) {
+                sum += Integer.parseInt(splitB[j]);
+            }
+
+            if (i == 0) {
+                ans = sum;
+            } else {
+                ans -= sum;
+            }
         }
 
-        for (int i = 0; i < split2.length; i++) {
-            if (split2[i].contains("0")) zero++;
-        }
-
-        System.out.println(Math.min(one, zero));
+        System.out.println(ans);
     }
 }
 
