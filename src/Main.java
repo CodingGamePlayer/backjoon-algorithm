@@ -4,44 +4,29 @@ package src;
 import java.util.*;
 
 public class Main {
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        int a = sc.nextInt();
-        int b = sc.nextInt();
+        int n = sc.nextInt();
 
-        Deque<Integer> deque = new LinkedList<>();
-        for (int i = 1; i <= a; i++) {
-            deque.offer(i);
-        }
+        for (int i = 0; i < n; i++) {
+            int target = sc.nextInt();
 
-        ArrayList<Integer> answer = new ArrayList<>();
+            int[] dp0 = new int[target + 1];
+            int[] dp1 = new int[target + 1];
 
-        int count = 1;
-        while (!deque.isEmpty()) {
-            if (count % b == 0) {
-                answer.add(deque.poll());
-            } else {
-                deque.offer(deque.poll());
+            dp0[0] = 1;
+            if (target >= 1) dp1[1] = 1;
+
+            for (int j = 2; j <= target; j++) {
+                dp0[j] = dp0[j - 1] + dp0[j - 2];
+                dp1[j] = dp1[j - 1] + dp1[j - 2];
             }
-            count++;
+            System.out.println(dp0[target] + " " + dp1[target]);
         }
-        StringBuilder sb = new StringBuilder();
-        sb.append("<");
-        for (int i = 0; i < answer.size(); i++) {
-            if (i == answer.size() - 1) {
-                sb.append(answer.get(i) + ">");
-            } else {
-                sb.append(answer.get(i) + ", ");
-            }
-        }
-
-        System.out.println(sb.toString());
     }
 
 }
-
 
 
 
