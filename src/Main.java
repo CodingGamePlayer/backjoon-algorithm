@@ -1,52 +1,47 @@
 package src;
 
-import java.util.Scanner;
 
 public class Main {
+    static int[][] arr;
+    static int num = 1;
 
-    static int n;
-    static int[] nums;
-    static int[] op = new int[4];
+    static int targetI;
+    static int targetJ;
 
-    static int max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        n = sc.nextInt();
 
-        nums = new int[n];
+    public static int solution(int N, int i, int j) {
+        arr = new int[N][N];
+        targetI = i;
+        targetJ = j;
+        dac(0, 0, N);
 
-        for (int i = 0; i < n; i++) {
-            nums[i] = sc.nextInt();
-        }
-
-        for (int i = 0; i < 4; i++) {
-            op[i] = sc.nextInt();
-        }
-
-        dfs(nums[0], 1);
-
-        System.out.println(max);
-        System.out.println(min);
+        return arr[i][j];
     }
 
-    private static void dfs(int num, int depth) {
-        if (depth == n) {
-            max = Math.max(max, num);
-            min = Math.min(min, num);
+    private static void dac(int row, int col, int size) {
+        if (size == 1) {
+            arr[row][col] = num++;
             return;
         }
 
-        for (int i = 0; i < 4; i++) {
-            if (op[i] > 0){
-                op[i]--;
-                if (i == 0) dfs(num + nums[depth], depth + 1);
-                else if (i == 1) dfs(num - nums[depth], depth + 1);
-                else if (i == 2) dfs(num * nums[depth], depth + 1);
-                else dfs(num / nums[depth], depth + 1);
-                op[i]++;
-            }
-        }
+        int n = size / 2;
+        dac(row, col + n, n);
+        if (arr[targetI][targetJ] != 0) return;
+        dac(row, col, n);
+        if (arr[targetI][targetJ] != 0) return;
+        dac(row + n, col, n);
+        if (arr[targetI][targetJ] != 0) return;
+        dac(row + n, col + n, n);
     }
+
+
+    public static void main(String[] args) {
+        int n = 4;
+        int i = 1;
+        int j = 3;
+        System.out.println(solution(n, i, j));
+    }
+
 }
 
 
