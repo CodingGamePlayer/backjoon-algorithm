@@ -1,23 +1,27 @@
+
+import java.io.*;
 import java.util.*;
 
 public class Main {
-    static List<Integer>[] graph;
-    static boolean[] visited;
 
-    public static void main(String[] args) {
+    static List<Integer> graph[];
+    static boolean[] visited;
+    static StringBuilder sb = new StringBuilder();
+
+    public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
+
         int n = sc.nextInt();
-        int m = sc.nextInt();
-        int start = sc.nextInt();
+        int e = sc.nextInt();
+        int s = sc.nextInt();
 
         graph = new ArrayList[n + 1];
-        visited = new boolean[n + 1];
 
-        for (int i = 1; i <= n; i++) {
+        for (int i = 0; i < n + 1; i++) {
             graph[i] = new ArrayList<>();
         }
 
-        for (int i = 0; i < m; i++) {
+        for (int i = 0; i < e; i++) {
             int u = sc.nextInt();
             int v = sc.nextInt();
 
@@ -25,42 +29,53 @@ public class Main {
             graph[v].add(u);
         }
 
-        for (int i = 1; i <= n; i++) {
+        for (int i = 0; i < n + 1; i++) {
             Collections.sort(graph[i]);
         }
+        
+        visited = new boolean[n + 1];
+        dfs(s);
+        sb.append("\n");
 
-        dfs(start);
-        System.out.println();
-        bfs(start);
+        visited = new boolean[n + 1];
+        bfs(s);
+        sb.append("\n");
+
+        System.out.println(sb.toString());
+
+    }
+
+    private static void bfs(int node) {
+        Queue<Integer> queue = new LinkedList<>();
+
+        visited[node] = true;
+        queue.add(node);
+        sb.append(node + " ");
+
+        while (!queue.isEmpty()) {
+            int cur = queue.poll();
+            for (int next : graph[cur]) {
+                if (!visited[next]){
+                    visited[next] = true;
+                    sb.append(next + " ");
+                    queue.add(next);
+                }
+            }
+        }
 
     }
 
     private static void dfs(int node) {
         visited[node] = true;
-        System.out.print(node + " ");
+        sb.append(node + " ");
+
         for (int next : graph[node]) {
             if (!visited[next]) {
+
                 dfs(next);
             }
         }
     }
-
-    private static void bfs(int start) {
-        Deque<Integer> deque = new LinkedList<>();
-        boolean[] visited = new boolean[graph.length];
-
-        deque.add(start);
-        visited[start] = true;
-
-        while (!deque.isEmpty()) {
-            Integer node = deque.poll();
-            System.out.print(node + " ");
-            for (int next : graph[node]) {
-                if (!visited[next]){
-                    visited[next] = true;
-                    deque.add(next);
-                }
-            }
-        }
-    }
 }
+
+
