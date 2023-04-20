@@ -1,80 +1,90 @@
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
 
+    static Node[] graph;
+
     static class Node {
-        char value;
+        char node;
         Node left;
         Node right;
 
-        public Node(char value) {
-            this.value = value;
+        public Node(char node) {
+            this.node = node;
         }
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         int n = Integer.parseInt(br.readLine());
 
-        Node[] tree = new Node[26];
+        graph = new Node[26];
 
         for (int i = 0; i < n; i++) {
-            String[] strArr = br.readLine().split(" ");
-            char node = strArr[0].charAt(0);
-            char left = strArr[1].charAt(0);
-            char right = strArr[2].charAt(0);
+            String[] s = br.readLine().split(" ");
+            char node = s[0].charAt(0);
+            char left = s[1].charAt(0);
+            char right = s[2].charAt(0);
 
-            int cur = node - 'A';
-            if (tree[cur] == null) {
-                tree[cur] = new Node(node);
+            int nodeIdx = node - 'A';
+            if (graph[nodeIdx] == null) graph[nodeIdx] = new Node(node);
+
+            int leftIdx = left - 'A';
+            if ('.' != left) {
+                if (graph[leftIdx] == null) {
+                    graph[leftIdx] = new Node(left);
+                }
+                graph[nodeIdx].left = graph[leftIdx];
             }
 
-            int leftNode = left - 'A';
-            if (left != '.') {
-                if (tree[leftNode] == null) tree[leftNode] = new Node(left);
-                tree[cur].left = tree[leftNode];
-            }
-
-            int rightNode = right - 'A';
-            if (right != '.') {
-                if (tree[rightNode] == null) tree[rightNode] = new Node(right);
-                tree[cur].right = tree[rightNode];
+            int rightIdx = right - 'A';
+            if ('.' != right) {
+                if (graph[rightIdx] == null) {
+                    graph[rightIdx] = new Node(right);
+                }
+                graph[nodeIdx].right = graph[rightIdx];
             }
         }
 
-        preOrder(tree[0]);
+        preOrder(graph[0]);
         System.out.println();
-        inOrder(tree[0]);
+
+        inOrder(graph[0]);
         System.out.println();
-        postOrder(tree[0]);
+
+        postOrder(graph[0]);
+        System.out.println();
+
     }
 
     private static void postOrder(Node node) {
-        if (node == null) {
-            return;
-        }
+        if (node == null) return;
 
         postOrder(node.left);
         postOrder(node.right);
-        System.out.print(node.value);
+        System.out.print(node.node);
+
     }
 
     private static void inOrder(Node node) {
         if (node == null) return;
 
         inOrder(node.left);
-        System.out.print(node.value);
+        System.out.print(node.node);
         inOrder(node.right);
     }
 
     private static void preOrder(Node node) {
-        if (node == null) {
-            return;
-        }
+        if (node == null) return;
 
-        System.out.print(node.value);
+        System.out.print(node.node);
         preOrder(node.left);
         preOrder(node.right);
     }
+
+
 }
