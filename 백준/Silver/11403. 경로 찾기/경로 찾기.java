@@ -1,38 +1,56 @@
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
+
+    static int n;
     static int[][] graph;
     static boolean[] visited;
-    static int n;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        n = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        // 인접 행렬 입력 받기
+        n = Integer.parseInt(br.readLine());
         graph = new int[n][n];
+
         for (int i = 0; i < n; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
             for (int j = 0; j < n; j++) {
-                graph[i][j] = sc.nextInt();
+                graph[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
-        // 결과 출력
         for (int i = 0; i < n; i++) {
             visited = new boolean[n];
-            dfs(i);
+
+            bfs(i);
+
             for (int j = 0; j < n; j++) {
-                System.out.print(visited[j] ? "1 " : "0 ");
+                System.out.print(visited[j] ? 1 + " " : 0 + " ");
             }
             System.out.println();
         }
+
+
     }
 
-    static void dfs(int curr) {
-        for (int next = 0; next < n; next++) {
-            if (graph[curr][next] == 1 && !visited[next]) {
-                visited[next] = true;
-                dfs(next);
+    private static void bfs(int node) {
+        Queue<Integer> queue = new LinkedList<>();
+
+        queue.add(node);
+
+        while (!queue.isEmpty()) {
+            Integer cur = queue.poll();
+
+            for (int i = 0; i < graph[cur].length; i++) {
+                if (graph[cur][i] == 1 && !visited[i]){
+                    visited[i] = true;
+                    queue.add(i);
+                }
             }
         }
     }
