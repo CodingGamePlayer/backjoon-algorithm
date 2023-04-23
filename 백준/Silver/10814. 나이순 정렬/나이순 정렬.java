@@ -1,33 +1,31 @@
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        Scanner scan = new Scanner(System.in);
 
-        int n = Integer.parseInt(br.readLine());
-        List<String>[] list = new List[201];
+        int n = scan.nextInt();
 
-        for (int i = 0; i < 201; i++) {
-            list[i] = new ArrayList<>();
-        }
+        String[][] arr = new String[n][2];
 
         for (int i = 0; i < n; i++) {
-            String[] s = br.readLine().split(" ");
-            int age = Integer.parseInt(s[0]);
-            String name = s[1];
-
-            list[age].add(name);
+            arr[i][0] = scan.next();
+            arr[i][1] = scan.next();
         }
 
-        for (int i = 0; i < 201; i++) {
-            if (list[i] != null) {
-                for (int j = 0; j < list[i].size(); j++) {
-                    System.out.printf("%d %s \n", i, list[i].get(j));
-                }
+        Arrays.sort(arr, new Comparator<String[]>() {
+            @Override
+            public int compare(String[] o1, String[] o2) {
+                return Integer.compare(Integer.parseInt(o1[0]), Integer.parseInt(o2[0]));
             }
+        });
+
+        for (String[] str : arr) {
+            System.out.println(str[0] + " " + str[1]);
         }
     }
 }
