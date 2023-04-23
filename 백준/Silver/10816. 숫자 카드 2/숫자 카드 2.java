@@ -1,36 +1,43 @@
-import java.io.IOException;
 import java.util.*;
 
-public class Main {
-    public static void main(String[] args) throws IOException {
-        Scanner scan = new Scanner(System.in);
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
-        int n = scan.nextInt();
+        int n = sc.nextInt();
+        int[] arr = new int[n];
 
-        Deque<Integer> stack = new LinkedList<>();
         for (int i = 0; i < n; i++) {
-            stack.push(scan.nextInt());
+            arr[i] = sc.nextInt();
         }
 
-        int m = scan.nextInt();
-        Map<Integer, Integer> map = new HashMap<>();
-        Deque<Integer> queue = new LinkedList<>();
+        int m = sc.nextInt();
+        int[] target = new int[m];
+
         for (int i = 0; i < m; i++) {
-            int num = scan.nextInt();
-            queue.push(num);
-            map.put(num, 0);
+            target[i] = sc.nextInt();
         }
 
-        for (int i = 0; i < n; i++) {
-            Integer pop = stack.pop();
-            map.put(pop, map.getOrDefault(pop, 0) + 1);
+        Map<Integer, Integer> map = new LinkedHashMap<>();
+
+        for (int num : arr) {
+            if (map.containsKey(num)) {
+                map.put(num, map.get(num) + 1);
+            } else {
+                map.put(num, 1);
+            }
         }
 
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < m; i++) {
-            Integer pop = queue.pollLast();
-            sb.append(map.get(pop) + " ");
+
+        for (int num : target) {
+            if (map.containsKey(num)) {
+                sb.append(map.get(num) + " ");
+            } else {
+                sb.append("0 ");
+            }
         }
+
         System.out.println(sb.toString());
     }
 }
