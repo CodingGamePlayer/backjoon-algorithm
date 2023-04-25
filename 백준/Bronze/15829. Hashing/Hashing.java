@@ -1,4 +1,3 @@
-
 import java.io.*;
 
 class Main {
@@ -13,9 +12,9 @@ class Main {
 
         int ans = 0;
         for (int i = 0; i < strArr.length; i++) {
-            ans += (strArr[i].charAt(0) - 'a' + 1) * Math.pow(31, i);
+            ans += (strArr[i].charAt(0) - 'a' + 1) * Math.pow(31, i) % 1234567891;
         }
 
-        System.out.println(ans);
+        System.out.println(ans % 1234567891);
     }
 }
