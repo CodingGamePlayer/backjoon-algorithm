@@ -1,41 +1,46 @@
+import java.io.*;
 import java.util.*;
 
 public class Main {
+
+    static int N;
+    static int M;
     static List<Integer>[] graph;
+    static boolean[] visited;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = null;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        N = Integer.parseInt(br.readLine());
+        M = Integer.parseInt(br.readLine());
 
-        int n = sc.nextInt();
-        int m = sc.nextInt();
+        graph = new ArrayList[N + 1];
+        visited = new boolean[N + 1];
 
-        graph = new ArrayList[n + 1];
-
-        for (int i = 1; i < n + 1; i++) {
+        for (int i = 0; i < N + 1; i++) {
             graph[i] = new ArrayList<>();
         }
 
-        for (int i = 0; i < m; i++) {
-            int u = sc.nextInt();
-            int v = sc.nextInt();
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
+            int u = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
 
             graph[u].add(v);
             graph[v].add(u);
         }
 
-        List<Integer> friends = new ArrayList<>();
-        for(int friend : graph[1]){
-            if (!friends.contains(friend)) friends.add(friend);
+        ArrayList<Integer> answer = new ArrayList<>();
 
-            for (int friendOfFriend : graph[friend]) {
-                if (friendOfFriend != 1 && !friends.contains(friendOfFriend)){
-                    friends.add(friendOfFriend);
-                }
+        for (int first : graph[1]) {
+            if (!answer.contains(first)) answer.add(first);
+            for (int second : graph[first]) {
+                if (second != 1 && !answer.contains(second))answer.add(second);
             }
         }
 
-        System.out.println(friends.size());
-
+        System.out.println(answer.size());
     }
 
 }
