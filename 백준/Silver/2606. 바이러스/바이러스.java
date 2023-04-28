@@ -1,43 +1,57 @@
+import java.io.*;
 import java.util.*;
 
 public class Main {
+
+    static int N;
+    static int M;
     static List<Integer>[] graph;
-    static boolean visited[];
-    static int cnt = 0;
+    static boolean[] visited;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = null;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        N = Integer.parseInt(br.readLine());
+        M = Integer.parseInt(br.readLine());
 
-        int n = sc.nextInt();
-        int v = sc.nextInt();
+        graph = new ArrayList[N + 1];
+        visited = new boolean[N + 1];
 
-        graph = new ArrayList[n + 1];
-        visited = new boolean[n + 1];
-
-        for (int i = 1; i <= n; i++) {
+        for (int i = 0; i < N + 1; i++) {
             graph[i] = new ArrayList<>();
         }
 
-        for (int i = 0; i < v; i++) {
-            int from = sc.nextInt();
-            int to = sc.nextInt();
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
+            int u = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
 
-            graph[from].add(to);
-            graph[to].add(from);
+            graph[u].add(v);
+            graph[v].add(u);
         }
 
-        dfs(1);
-        System.out.println(cnt);
+        System.out.println(bfs(1));
     }
 
-    private static void dfs(int node) {
-        visited[node] = true;
+    private static int bfs(int node) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(node);
 
-        for (int next : graph[node]) {
-            if (!visited[next]) {
-                cnt++;
-                dfs(next);
+        int cnt = 0;
+        while (!queue.isEmpty()) {
+            Integer poll = queue.poll();
+            visited[poll] = true;
+            for (int next : graph[poll]) {
+                if (!visited[next] && !queue.contains(next)) {
+                    queue.add(next);
+                    cnt++;
+                }
             }
+
         }
+        return cnt;
+
     }
+
 }
