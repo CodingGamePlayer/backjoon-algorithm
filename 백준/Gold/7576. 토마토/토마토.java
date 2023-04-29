@@ -34,39 +34,37 @@ public class Main {
     private static int bfs() {
         Queue<int[]> queue = new LinkedList<>();
 
-        // 익은 토마토를 큐에 추가
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 if (map[i][j] == 1) {
-                    queue.add(new int[]{i, j, 0});
                     visited[i][j] = true;
+                    queue.add(new int[]{i, j, 0});
                 }
             }
         }
 
-        int days = 0;
+        int day = 0;
         while (!queue.isEmpty()) {
-            int[] cur = queue.poll();
-            int curX = cur[0];
-            int curY = cur[1];
-            int curDays = cur[2];
+            int[] curArr = queue.poll();
+            int curX = curArr[0];
+            int curY = curArr[1];
+            int curD = curArr[2];
 
-            days = curDays;
+            day = curD;
 
             for (int i = 0; i < 4; i++) {
-                int nx = curX + dx[i];
-                int ny = curY + dy[i];
+                int nX = curX + dx[i];
+                int nY = curY + dy[i];
 
-                if (nx >= 0 && nx < N && ny >= 0 && ny < M) {
-                    if (map[nx][ny] == 0 && !visited[nx][ny]) {
-                        queue.add(new int[]{nx, ny, curDays + 1});
-                        visited[nx][ny] = true;
+                if (nX >= 0 && nX < N && nY >= 0 && nY < M) {
+                    if (map[nX][nY] == 0 && !visited[nX][nY]) {
+                        queue.add(new int[]{nX, nY, curD + 1});
+                        visited[nX][nY] = true;
                     }
                 }
             }
         }
 
-        // 토마토가 다 익었는지 확인
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 if (map[i][j] == 0 && !visited[i][j]) {
@@ -75,6 +73,6 @@ public class Main {
             }
         }
 
-        return days;
+        return day;
     }
 }
