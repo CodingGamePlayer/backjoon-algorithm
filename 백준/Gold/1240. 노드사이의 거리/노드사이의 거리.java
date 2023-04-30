@@ -1,13 +1,17 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    static int n, t;
-    static List<Node>[] tree;
+    static List<Node>[] graph;
+    static boolean[] visited;
+    static int[] weight;
+    static int N, M;
 
-    private static class Node {
-        private int node;
-        private int weight;
+    static class Node {
+        int node;
+        int weight;
 
         public Node(int node, int weight) {
             this.node = node;
@@ -17,68 +21,52 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        String[] s = br.readLine().split(" ");
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-        n = Integer.parseInt(s[0]);
-        t = Integer.parseInt(s[1]);
+        graph = new ArrayList[N + 1];
 
-        tree = new ArrayList[n + 1];
-
-        for (int i = 0; i <= n; i++) {
-            tree[i] = new ArrayList<>();
+        for (int i = 0; i < N + 1; i++) {
+            graph[i] = new ArrayList<>();
         }
 
-        for (int i = 0; i < n - 1; i++) {
-            String[] arr = br.readLine().split(" ");
+        for (int i = 0; i < N - 1; i++) {
+            st = new StringTokenizer(br.readLine());
+            int u = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
+            int w = Integer.parseInt(st.nextToken());
 
-            int u = Integer.parseInt(arr[0]);
-            int v = Integer.parseInt(arr[1]);
-            int weight = Integer.parseInt(arr[2]);
-
-            tree[u].add(new Node(v, weight));
-            tree[v].add(new Node(u, weight));
+            graph[u].add(new Node(v, w));
+            graph[v].add(new Node(u, w));
         }
 
-        for (int i = 0; i < t; i++) {
-            String[] arr = br.readLine().split(" ");
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
+            int start = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
+            weight = new int[N + 1];
+            visited = new boolean[N + 1];
 
-            int result = dfs(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]));
-
-            bw.write(result + "\n");
+            dfs(start);
+            System.out.println(weight[end]);
         }
 
-        bw.flush();
-        bw.close();
-        br.close();
+
     }
 
-    private static int dfs(int start, int end) {
-        boolean[] visited = new boolean[n + 1];
-        int[] sumWeight = new int[n + 1];
-
-        Deque<Integer> deque = new LinkedList<>();
-
+    private static void dfs(int start) {
         visited[start] = true;
-        deque.add(start);
-
-        while (!deque.isEmpty()) {
-            int cur = deque.poll();
-
-            for (Node next : tree[cur]) {
-                int nextNode = next.node;
-                int weight = next.weight;
-
-                if (!visited[nextNode]) {
-                    visited[nextNode] = true;
-                    sumWeight[nextNode] = sumWeight[cur] + weight;
-                    deque.offer(nextNode);
-                }
+        for (Node next : graph[start]) {
+            int nodeN = next.node;
+            int weightN = next.weight;
+            if (!visited[nodeN]) {
+                weight[nodeN] = weight[start] + weightN;
+                dfs(nodeN);
             }
         }
-
-        return sumWeight[end];
     }
+
 
 }
