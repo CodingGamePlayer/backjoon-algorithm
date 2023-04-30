@@ -1,70 +1,72 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class Main {
-
-    static int len, n;
-    static String arr[];
-    static String password[];
-
-    static String[] mothers = {"a", "e", "i", "o", "u"};
-
+    static int L, C;
+    static char[] answer, arr;
+    static boolean[] visited;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        len = Integer.parseInt(st.nextToken());
-        n = Integer.parseInt(st.nextToken());
+        L = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
 
-        arr = new String[n];
-        password = new String[len];
+        answer = new char[L];
+        arr = new char[C];
+        visited = new boolean[L];
 
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < n; i++) {
-            arr[i] = st.nextToken();
+        for (int i = 0; i < C; i++) {
+            arr[i] = st.nextToken().charAt(0);
         }
-
         Arrays.sort(arr);
 
-        dfs(0, 0);
+        find(0, bw, 0);
+
+        bw.flush();
     }
 
-    private static void dfs(int depth, int start) {
-        if (depth == len) {
-            if (check()) {
-                for (String s : password) {
-                    System.out.print(s);
+    private static void find(int depth, BufferedWriter bw, int start) throws IOException {
+        if (depth == L) {
+            if (isPossible()) {
+                for (char c : answer) {
+                    bw.write(c);
                 }
-                System.out.println();
+                bw.write("\n");
             }
             return;
         }
 
-        for (int i = start; i < n; i++) {
-            password[depth] = arr[i];
-            dfs(depth + 1, i + 1);
+        for (int i = start; i < arr.length; i++) {
+            answer[depth] = arr[i];
+            find(depth + 1, bw, i + 1);
         }
+
+
     }
 
-    private static boolean check() {
-        int mother = 0;
-        int child = 0;
-        for (int i = 0; i < password.length; i++) {
-            boolean flag = false;
+    private static boolean isPossible() {
+        char[] mothers = {'a', 'e', 'i', 'o', 'u'};
+        int m = 0;
+        int c = 0;
+
+        for (int i = 0; i < answer.length; i++) {
+            boolean isMother = false;
             for (int j = 0; j < mothers.length; j++) {
-                if (mothers[j].equals(password[i])) {
-                    flag = true;
+                if (answer[i] == mothers[j]) {
+                    isMother = true;
                     break;
                 }
             }
 
-            if (flag) mother++;
-            else child++;
+            if (isMother) m++;
+            else c++;
         }
 
-        if (mother >= 1 && child >= 2) return true;
+        if (m >= 1 && c >= 2) return true;
+
         return false;
     }
 }
